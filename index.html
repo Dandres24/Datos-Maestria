@@ -74,6 +74,28 @@
   .navlist a:hover{background:var(--neutral-50)}
   .navlist a.active{background:var(--brand-100); color:var(--brand-700); font-weight:600; border:1px solid #d7edd8}
 
+  /* ===== Submenú dentro de Inicio ===== */
+  .group { list-style:none; }
+  .group-toggle{
+    width:100%; display:flex; justify-content:space-between; align-items:center;
+    background:#fff; border:1px solid var(--neutral-200); border-radius:10px;
+    padding:10px 12px; font-weight:700; cursor:pointer;
+  }
+  .group .caret{ transition: transform .18s ease; }
+  .group.open .caret{ transform: rotate(180deg); }
+
+  .subnav{ margin:8px 0 0 8px; padding-left:12px; border-left:2px solid var(--neutral-200); display:none; }
+  .group.open > .subnav{ display:block; }
+
+  .subnav a{
+    display:flex; padding:8px 10px; margin:2px 0; border-radius:8px;
+    color:#222; text-decoration:none;
+  }
+  .subnav a:hover{ background:var(--neutral-50); }
+  .subnav a.active{ background:var(--brand-100); color:var(--brand-700); font-weight:600; border:1px solid #d7edd8; }
+
+  .divider{ height:8px; }
+
   /* Content */
   main{min-width:0}
   section{
@@ -163,7 +185,6 @@
   main section.active { display: block; }
   @keyframes fade { from { opacity:.0; transform: translateY(6px); } to { opacity:1; transform:none; } }
 
-
   /* Responsive */
   @media (max-width: 1100px){
     .wrap{grid-template-columns: 1fr}
@@ -205,18 +226,29 @@
       <h4>Secciones</h4>
       <nav>
         <ul class="navlist" id="sideLinks">
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#info">Información general</a></li>
-          <li><a href="#presentacion">Presentación</a></li>
-          <li><a href="#misionvision">Misión y Visión</a></li>
-          <li><a href="#objetivos">Objetivos</a></li>
-          <li><a href="#organigrama">Organigrama</a></li>
-          <li><a href="#dirigido">Dirigido a</a></li>
-          <li><a href="#perfiles">Perfiles</a></li>
-          <li><a href="#lineas">Líneas de investigación</a></li>
-          <li><a href="#requisitos">Requisitos de inscripción</a></li>
-          <li><a href="#admision">Admisión y selección</a></li>
-          <li><a href="#graduacion">Requisitos de graduación</a></li>
+          <!-- Grupo INICIO con subsecciones -->
+          <li class="group open">
+            <button class="group-toggle" aria-expanded="true">
+              <span>Inicio</span><span class="caret">▾</span>
+            </button>
+            <ul class="subnav">
+              <li><a href="#inicio">Portada</a></li>
+              <li><a href="#info">Información general</a></li>
+              <li><a href="#presentacion">Presentación</a></li>
+              <li><a href="#misionvision">Misión y Visión</a></li>
+              <li><a href="#objetivos">Objetivos</a></li>
+              <li><a href="#organigrama">Organigrama</a></li>
+              <li><a href="#dirigido">Dirigido a</a></li>
+              <li><a href="#perfiles">Perfiles</a></li>
+              <li><a href="#lineas">Líneas de investigación</a></li>
+              <li><a href="#requisitos">Requisitos de inscripción</a></li>
+              <li><a href="#admision">Admisión y selección</a></li>
+              <li><a href="#graduacion">Requisitos de graduación</a></li>
+            </ul>
+          </li>
+
+          <li class="divider"></li>
+          <!-- Resto de vistas principales -->
           <li><a href="#competencias">Competencias</a></li>
           <li><a href="#plan">Plan de estudio</a></li>
           <li><a href="#docentes">Docentes</a></li>
@@ -284,7 +316,7 @@
           fundamentos investigativos, pedagógicos, curriculares, evaluativos y tecnológicos para potenciar el
           desempeño académico y laboral en docencia, investigación y extensión.
         </p>
-        <p class="muted"> <!-- TODO: puedes extender el texto con tu redacción completa -->
+        <p class="muted">
           Se articula a necesidades de la región Caribe y del país, promoviendo procesos formativos éticos, estéticos,
           ambientales, filosóficos, políticos y sociales, con cursos obligatorios y electivos que permiten la
           profundización disciplinar de acuerdo con los intereses investigativos de cada estudiante.
@@ -535,7 +567,7 @@
               <b>Oscar Eugenio Tamayo Alzate</b>
               <div class="small">Doctor en Didáctica de las Ciencias • Narrativa en Ciencias • Investigación Educativa y Ciencia</div>
             </div>
-            <!-- TODO: añade más docentes siguiendo este patrón -->
+            <!-- Añade más docentes siguiendo este patrón -->
           </div>
         </div>
 
@@ -562,7 +594,7 @@
               <b>Carlos Javier Mosquera Suárez</b>
               <div class="small">Doctor en Didáctica de las Ciencias • Didáctica de la Física</div>
             </div>
-            <!-- TODO: añade el resto de docentes de tu lista -->
+            <!-- Añade el resto de docentes -->
           </div>
         </div>
       </section>
@@ -587,7 +619,7 @@
   <button class="totop" id="toTop" aria-label="Volver arriba">↑</button>
 
 <script>
-  // ====== SideNav móvil (igual que antes)
+  // ====== SideNav móvil
   const btnMenu = document.getElementById('btnMenu');
   const sidenav  = document.getElementById('sidenav');
   btnMenu?.addEventListener('click', ()=>{
@@ -616,16 +648,21 @@
     // Enlaces activos
     setActiveLink(target.id);
 
+    // Si el link activo está dentro del grupo "Inicio", abrir submenú
+    const activeLink = document.querySelector('#sideLinks a[href="#'+id+'"]');
+    const parentGroup = activeLink?.closest('.group');
+    if (parentGroup){
+      parentGroup.classList.add('open');
+      parentGroup.querySelector('.group-toggle')?.setAttribute('aria-expanded','true');
+    }
+
     // Cierra menú en móvil
     if (window.innerWidth <= 1100) sidenav.style.display = 'none';
 
-    // Lleva el foco al título para accesibilidad
+    // Accesibilidad + scroll top
     const h = target.querySelector('h2, h1');
     h?.setAttribute('tabindex','-1'); h?.focus();
-
-    // Actualiza hash (opcional)
     if (pushHash) history.pushState(null, '', '#'+target.id);
-    // Vuelve arriba (evita quedar a mitad de scroll)
     window.scrollTo({top:0, behavior:'instant'});
   }
 
@@ -641,6 +678,15 @@
   }
   [...sideLinks, ...topLinks].forEach(hookNav);
 
+  // Abrir/cerrar el grupo "Inicio"
+  document.querySelectorAll('.group-toggle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const li = btn.closest('.group');
+      const isOpen = li.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+  });
+
   // Carga inicial según hash o muestra "inicio"
   window.addEventListener('DOMContentLoaded', ()=>{
     const first = sections.find(s=>s.id==='inicio')?.id || sections[0]?.id;
@@ -654,7 +700,7 @@
     if(hash) showSection(hash, false);
   });
 
-  // ====== Tabs (igual que antes, funcionan dentro de cada sección visible)
+  // ====== Tabs
   function wireTabs(scope){
     const tabs = scope.querySelectorAll('.tab');
     const panels = scope.querySelectorAll('.tabpanel');
@@ -669,12 +715,12 @@
   }
   document.querySelectorAll('#misionvision, #competencias, #docentes').forEach(wireTabs);
 
-  // ====== Acordeón (igual que antes)
+  // ====== Acordeón
   document.querySelectorAll('.ac-head').forEach(h=>{
     h.addEventListener('click', ()=> h.parentElement.classList.toggle('open'));
   });
 
-  // ====== Modal organigrama (igual que antes)
+  // ====== Modal organigrama
   const imgOrg  = document.getElementById('imgOrg');
   const orgModal = document.getElementById('orgModal');
   imgOrg?.addEventListener('click', ()=> orgModal.classList.add('open'));
