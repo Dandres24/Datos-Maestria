@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maestría en Didáctica de las Ciencias Naturales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* Paleta */
+    --brand-600:#2F7D32; --brand-700:#246327; --brand-100:#E8F5E9;
+    --accent-600:#1E88E5;
+    --neutral-900:#111; --neutral-800:#1e1e1e; --neutral-700:#444;
+    --neutral-500:#8E8E8E; --neutral-300:#dcdcdc; --neutral-200:#ececec; --neutral-50:#fafafa;
+    /* Tipografía */
+    --fs-display:40px; --fs-h1:32px; --fs-h2:24px; --fs-h3:18px; --fs-body:16px; --fs-small:14px;
+    --lh-display:48px; --lh-h1:40px; --lh-h2:32px; --lh-h3:28px; --lh-body:24px; --lh-small:20px;
+    /* UI */
+    --radius-lg:12px; --radius-md:10px; --radius-sm:8px;
+    --shadow-md:0 8px 26px rgba(0,0,0,.08);
+    --content-max:1200px; /* ancho columna derecha */
+    --sidenav-w:290px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    color:var(--neutral-900); background:#fff;
+  }
+
+  /* Top bar */
+  .topbar{
+    position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid var(--neutral-200);
+    box-shadow: 0 2px 0 rgba(0,0,0,.02);
+  }
+  .topbar .inner{
+    max-width:calc(var(--content-max) + var(--sidenav-w) + 64px);
+    margin:auto; display:flex; align-items:center; gap:16px; padding:12px 24px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px; font-weight:800; font-size:18px; color:var(--brand-700);
+    text-decoration:none;
+  }
+  .brand-badge{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,#3CA34A, #2F7D32)}
+  .toplinks{margin-left:auto; display:flex; gap:16px; font-size:14px}
+  .toplinks a{color:#222; text-decoration:none; padding:8px 10px; border-radius:8px}
+  .toplinks a:hover{background:var(--neutral-50)}
+  .hamburger{display:none; margin-left:auto; border:0; background:#fff; padding:8px 10px; border-radius:8px}
+
+  /* Layout */
+  .wrap{
+    display:grid;
+    grid-template-columns: var(--sidenav-w) 1fr;
+    gap:24px;
+    max-width:calc(var(--content-max) + var(--sidenav-w) + 64px);
+    margin:0 auto; padding:24px;
+  }
+
+  /* SideNav */
+  .sidenav{
+    position:sticky; top:72px; height:calc(100dvh - 90px);
+    border:1px solid var(--neutral-200); border-radius:var(--radius-lg);
+    padding:14px; overflow:auto; box-shadow:var(--shadow-md); background:#fff;
+  }
+  .sidenav h4{margin:8px 10px 10px; font-size:14px; color:var(--neutral-700); font-weight:700; letter-spacing:.01em}
+  .navlist{list-style:none; padding:0; margin:0}
+  .navlist a{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 10px; margin:2px 0; color:#222; text-decoration:none; border-radius:10px; font-size:14px;
+  }
+  .navlist a:hover{background:var(--neutral-50)}
+  .navlist a.active{background:var(--brand-100); color:var(--brand-700); font-weight:600; border:1px solid #d7edd8}
+
+  /* Content */
+  main{min-width:0}
+  section{
+    background:#fff; border:1px solid var(--neutral-200); border-radius:var(--radius-lg);
+    padding:22px 22px; margin-bottom:22px; box-shadow:var(--shadow-md);
+  }
+  .hero{
+    padding:0; overflow:hidden;
+  }
+  .hero-in{
+    display:grid; grid-template-columns:1.2fr 1fr; gap:0;
+    min-height:280px;
+  }
+  .hero-text{padding:28px}
+  .hero h1{font-size:var(--fs-h1); line-height:var(--lh-h1); margin:0 0 8px}
+  .hero p{margin:0 0 16px; color:var(--neutral-700)}
+  .hero .cta{display:flex; gap:10px; flex-wrap:wrap}
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:10px 14px; cursor:pointer; font-weight:600;
+  }
+  .btn.primary{background:var(--brand-600); color:#fff}
+  .btn.ghost{background:#fff; color:var(--brand-700); border:1px solid #cfe9d0}
+  .hero-img{background:url('https://images.unsplash.com/photo-1580584128409-8e4b66d0a9b0?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat; min-height:260px}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+  .stat{
+    border:1px solid var(--neutral-200); border-radius:12px; padding:14px; background:var(--brand-100);
+  }
+  .stat .k{font-size:24px; font-weight:800; color:var(--brand-700)}
+  .muted{color:var(--neutral-700)}
+
+  h2{font-size:var(--fs-h2); line-height:var(--lh-h2); margin:0 0 8px}
+  h3{font-size:var(--fs-h3); line-height:var(--lh-h3); margin:12px 0 8px}
+
+  /* Tabla 2 col */
+  .kv{
+    width:100%; border-collapse:separate; border-spacing:0; border:1px solid var(--neutral-200); border-radius:12px; overflow:hidden;
+  }
+  .kv th, .kv td{padding:12px 14px; text-align:left; vertical-align:top}
+  .kv th{width:34%; background:#f7f7f7; font-weight:600}
+  .kv tr+tr td, .kv tr+tr th{border-top:1px solid var(--neutral-200)}
+
+  /* Acordeón */
+  .accordion{display:grid; gap:10px}
+  .ac-item{border:1px solid var(--neutral-200); border-radius:12px; overflow:hidden}
+  .ac-head{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:#f9faf9; cursor:pointer}
+  .ac-head b{font-size:16px}
+  .ac-body{display:none; padding:14px}
+  .ac-item.open .ac-body{display:block}
+
+  /* Callout (nota) */
+  .callout{
+    border-left:4px solid var(--brand-600); background:#f6fbf6; padding:12px 14px; border-radius:8px;
+  }
+
+  /* Tabs */
+  .tabs{display:flex; gap:6px; border-bottom:1px solid var(--neutral-200); margin-bottom:10px; flex-wrap:wrap}
+  .tab{padding:10px 12px; border-radius:10px; cursor:pointer; user-select:none}
+  .tab[aria-selected="true"]{background:var(--brand-100); color:var(--brand-700); font-weight:600}
+  .tabpanel{display:none}
+  .tabpanel.active{display:block}
+
+  /* Grid 2 */
+  .cols-2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+
+  /* Cards docentes */
+  .teacher{border:1px solid var(--neutral-200); border-radius:12px; padding:12px}
+  .teacher b{display:block}
+  .small{font-size:var(--fs-small); line-height:var(--lh-small); color:var(--neutral-700)}
+
+  /* Modal */
+  .modal{position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; padding:24px; z-index:20}
+  .modal.open{display:flex}
+  .modal .box{background:#fff; border-radius:12px; padding:10px; max-width:min(1000px, 96vw)}
+  .modal img{max-width:100%; height:auto; display:block; border-radius:8px}
+
+  /* Back to top */
+  .totop{
+    position:fixed; right:18px; bottom:18px; padding:10px 12px; border-radius:28px; border:1px solid var(--neutral-300);
+    background:#fff; cursor:pointer; box-shadow:var(--shadow-md); display:none; z-index:15;
+  }
+  .totop.show{display:block}
+
+  /* Responsive */
+  @media (max-width: 1100px){
+    .wrap{grid-template-columns: 1fr}
+    .sidenav{display:none; position:fixed; top:60px; left:16px; right:16px; height:auto; z-index:15}
+    .hamburger{display:inline-block}
+    .hero-in{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(2,1fr)}
+    .cols-2{grid-template-columns:1fr}
+  }
+  @media (max-width: 480px){
+    .stats{grid-template-columns:1fr}
+  }
+</style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="inner">
+      <a class="brand" href="#inicio" title="Inicio">
+        <span class="brand-badge"></span>
+        Maestría en Didáctica de las Ciencias Naturales
+      </a>
+      <nav class="toplinks" aria-label="Atajos">
+        <a href="#plan">Plan de estudio</a>
+        <a href="#competencias">Competencias</a>
+        <a href="#docentes">Docentes</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <button class="hamburger" id="btnMenu" aria-label="Menú">☰</button>
+    </div>
+  </header>
+
+  <!-- Layout -->
+  <div class="wrap">
+    <!-- SideNav -->
+    <aside class="sidenav" id="sidenav" aria-label="Navegación del curso">
+      <h4>Secciones</h4>
+      <nav>
+        <ul class="navlist" id="sideLinks">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#info">Información general</a></li>
+          <li><a href="#presentacion">Presentación</a></li>
+          <li><a href="#misionvision">Misión y Visión</a></li>
+          <li><a href="#objetivos">Objetivos</a></li>
+          <li><a href="#organigrama">Organigrama</a></li>
+          <li><a href="#dirigido">Dirigido a</a></li>
+          <li><a href="#perfiles">Perfiles</a></li>
+          <li><a href="#lineas">Líneas de investigación</a></li>
+          <li><a href="#requisitos">Requisitos de inscripción</a></li>
+          <li><a href="#admision">Admisión y selección</a></li>
+          <li><a href="#graduacion">Requisitos de graduación</a></li>
+          <li><a href="#competencias">Competencias</a></li>
+          <li><a href="#plan">Plan de estudio</a></li>
+          <li><a href="#docentes">Docentes</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main>
+      <!-- HERO -->
+      <section id="inicio" class="hero" data-title="Inicio">
+        <div class="hero-in">
+          <div class="hero-text">
+            <h1>Maestría en Didáctica de las Ciencias Naturales</h1>
+            <p>Programa de profundización e investigación para fortalecer la enseñanza, el aprendizaje y la evaluación de las Ciencias Naturales (Biología, Química y Física) en los niveles de la básica, media y superior.</p>
+            <div class="cta">
+              <a class="btn primary" href="#plan">Ver plan de estudio</a>
+              <a class="btn ghost" href="#competencias">Competencias</a>
+            </div>
+            <div class="stats" style="margin-top:16px">
+              <div class="stat"><div class="k">48</div><div class="muted">Créditos</div></div>
+              <div class="stat"><div class="k">4</div><div class="muted">Semestres</div></div>
+              <div class="stat"><div class="k">107424</div><div class="muted">SNIES</div></div>
+              <div class="stat"><div class="k">Anual</div><div class="muted">Periodicidad</div></div>
+            </div>
+          </div>
+          <div class="hero-img" role="img" aria-label="Campus"></div>
+        </div>
+      </section>
+
+      <!-- INFORMACIÓN GENERAL -->
+      <section id="info" data-title="Información general">
+        <h2>Información general</h2>
+        <table class="kv" aria-label="Información general del programa">
+          <tr><th>Institución</th><td>Universidad de Córdoba</td></tr>
+          <tr><th>Nombre del programa</th><td>Maestría en Didáctica de las Ciencias Naturales</td></tr>
+          <tr><th>Título que otorga</th><td>Magíster en Didáctica de las Ciencias Naturales</td></tr>
+          <tr><th>Nivel académico</th><td>Maestría</td></tr>
+          <tr><th>Tipo</th><td>Investigación</td></tr>
+          <tr><th>Modalidad</th><td>Encuentros presenciales y sincrónicos</td></tr>
+          <tr><th>Ubicación</th><td>Montería</td></tr>
+          <tr><th>Duración</th><td>4 semestres</td></tr>
+          <tr><th>Periodicidad</th><td>Anual</td></tr>
+          <tr><th>Número de créditos</th><td>48</td></tr>
+          <tr><th>Número de estudiantes</th><td>25</td></tr>
+          <tr><th>Norma interna de creación</th><td>Acuerdo 285 del 18 de diciembre de 2017</td></tr>
+          <tr><th>Registro calificado</th><td>Resolución 013323 del 13 agosto de 2018 – 7 años</td></tr>
+          <tr><th>Renovación Registro Calificado</th><td>Resolución 006883 del 08 mayo 2024 – 7 años</td></tr>
+          <tr><th>Código SNIES</th><td>107424</td></tr>
+          <tr><th>Valor matrícula al iniciar</th><td>6 salarios mínimos legales vigentes</td></tr>
+          <tr><th>Dirección</th><td>Carrera 6 N° 77-305</td></tr>
+          <tr><th>Teléfono - Fax</th><td>7908234</td></tr>
+          <tr><th>Adscrito a</th><td>Departamento de Ciencias Naturales y Educación Ambiental</td></tr>
+          <tr><th>E-mail</th><td><a href="mailto:maestriadidacticacn@correo.unicordoba.edu.co">maestriadidacticacn@correo.unicordoba.edu.co</a></td></tr>
+        </table>
+      </section>
+
+      <!-- PRESENTACIÓN -->
+      <section id="presentacion" data-title="Presentación">
+        <h2>Presentación</h2>
+        <p>
+          La Maestría en Didáctica de las Ciencias Naturales consolida los saberes didácticos de las ciencias
+          (Biología, Química y Física) y fortalece las condiciones de educabilidad y enseñabilidad, integrando
+          fundamentos investigativos, pedagógicos, curriculares, evaluativos y tecnológicos para potenciar el
+          desempeño académico y laboral en docencia, investigación y extensión.
+        </p>
+        <p class="muted"> <!-- TODO: puedes extender el texto con tu redacción completa -->
+          Se articula a necesidades de la región Caribe y del país, promoviendo procesos formativos éticos, estéticos,
+          ambientales, filosóficos, políticos y sociales, con cursos obligatorios y electivos que permiten la
+          profundización disciplinar de acuerdo con los intereses investigativos de cada estudiante.
+        </p>
+      </section>
+
+      <!-- MISIÓN & VISIÓN -->
+      <section id="misionvision" data-title="Misión y Visión">
+        <div class="tabs" role="tablist" aria-label="Misión y Visión">
+          <div class="tab" role="tab" aria-selected="true" aria-controls="tab-mision" id="btn-mision">Misión</div>
+          <div class="tab" role="tab" aria-selected="false" aria-controls="tab-vision" id="btn-vision">Visión</div>
+        </div>
+        <div id="tab-mision" class="tabpanel active" role="tabpanel" aria-labelledby="btn-mision">
+          <p>Formar docentes en el dominio de las competencias didácticas para la enseñanza, aprendizaje y evaluación de las ciencias naturales y de los contenidos científicos de Biología, Química y Física, con propuestas de investigación pertinentes y de calidad.</p>
+        </div>
+        <div id="tab-vision" class="tabpanel" role="tabpanel" aria-labelledby="btn-vision">
+          <p>Para 2025, consolidarse como un programa reconocido por la formación continua de docentes con dominio didáctico, disciplinar, pedagógico e investigativo en Ciencias Naturales, atendiendo con calidad las exigencias educativas locales y nacionales.</p>
+        </div>
+      </section>
+
+      <!-- OBJETIVOS -->
+      <section id="objetivos" data-title="Objetivos">
+        <h2>Objetivos</h2>
+        <h3>Objetivo general</h3>
+        <p>Fortalecer la formación continua de profesionales de las Ciencias Naturales y afines, con consolidación en el saber de las Didácticas Específicas (Biología, Química y Física), integradas con lo investigativo y lo pedagógico para responder a las exigencias educativas regionales y nacionales.</p>
+
+        <h3>Objetivos específicos</h3>
+        <ul>
+          <li>Desarrollar competencias en didácticas específicas de química, biología y física, atendiendo estándares de calidad en básica, media y superior.</li>
+          <li>Fortalecer procesos curriculares que integren discursos pedagógicos, didácticos y evaluativos.</li>
+          <li>Implementar nuevas prácticas docentes para consolidar el conocimiento didáctico del área.</li>
+          <li>Reflexionar sobre problemáticas educativas y su impacto en el entorno.</li>
+          <li>Aplicar metodologías diversas mediadas por TIC para abordar problemáticas de la educación en ciencias.</li>
+          <li>Consolidar formación profesional con competencias en cooperación, liderazgo, creatividad y trabajo en equipo.</li>
+        </ul>
+      </section>
+
+      <!-- ORGANIGRAMA -->
+      <section id="organigrama" data-title="Organigrama">
+        <h2>Organigrama</h2>
+        <p class="muted">Haz clic para ampliar.</p>
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" alt="Organigrama del programa (reemplazar por imagen oficial)" style="width:100%; border-radius:12px; cursor:zoom-in" id="imgOrg">
+      </section>
+
+      <!-- DIRIGIDO A -->
+      <section id="dirigido" data-title="Dirigido a">
+        <h2>Dirigido a</h2>
+        <p>Profesionales del área de las Ciencias Naturales y Educación Ambiental: licenciados en ciencias naturales y educación ambiental; biología y química; licenciados en biología, química o física; licenciados en educación básica con énfasis en ciencias naturales; biólogos; químicos; bacteriólogos; ingenieros ambientales o agrónomos, y demás profesionales afines.</p>
+      </section>
+
+      <!-- PERFILES -->
+      <section id="perfiles" data-title="Perfiles">
+        <h2>Perfiles</h2>
+        <div class="cols-2">
+          <div>
+            <h3>Perfil profesional</h3>
+            <ul>
+              <li>Interés por la profundización en Didácticas Específicas de las Ciencias Naturales.</li>
+              <li>Dominio de metodologías de investigación acordes con la propuesta de trabajo.</li>
+              <li>Conocimientos en Biología, Química y Física relacionados con la enseñanza, aprendizaje y evaluación.</li>
+              <li>Actitudes para el trabajo cooperativo, liderazgo y compromiso con realidades educativas del contexto.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Perfil ocupacional</h3>
+            <ul>
+              <li>Docente de básica y media en áreas de Ciencias Naturales y Educación Ambiental.</li>
+              <li>Docente de educación superior en didácticas de las ciencias naturales.</li>
+              <li>Investigador en didáctica de las ciencias y educación ambiental.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÍNEAS DE INVESTIGACIÓN -->
+      <section id="lineas" data-title="Líneas de investigación">
+        <h2>Líneas de investigación</h2>
+        <ol>
+          <li>Didácticas específicas de las Ciencias Naturales en la formación básica, media y superior.</li>
+          <li>Currículo y formación del profesorado de Ciencias Naturales.</li>
+          <li>Innovaciones tecnológicas en las Ciencias Naturales.</li>
+          <li>Educación ambiental y diversidad.</li>
+          <li>Contenidos científicos y escolares en las Ciencias Naturales.</li>
+        </ol>
+      </section>
+
+      <!-- REQUISITOS DE INSCRIPCIÓN -->
+      <section id="requisitos" data-title="Requisitos de inscripción">
+        <h2>Requisitos de inscripción</h2>
+        <div class="accordion">
+          <div class="ac-item open">
+            <div class="ac-head"><b>Documentos y propuesta</b><span>▼</span></div>
+            <div class="ac-body">
+              <p>El aspirante anexará una <b>propuesta de investigación</b> enmarcada en una de las líneas del programa (10 páginas, Times 12, interlineado 1.5) con los apartados: título, línea, introducción, referentes teóricos, diseño metodológico, resultados esperados, cronograma, conclusiones y bibliografía.</p>
+              <div class="callout small">
+                <b>Nota:</b> La hoja de vida debe ser formato único soportada con títulos académicos, productividad y experiencia académica (mínimo 1 año). Título de pregrado de IES autorizada en áreas afines. Certificado de notas promedio del pregrado: 3.6.
+              </div>
+            </div>
+          </div>
+          <div class="ac-item">
+            <div class="ac-head"><b>Otros requisitos</b><span>▼</span></div>
+            <div class="ac-body small">
+              <ul>
+                <li>Ser licenciado o profesional afín (Ciencias Naturales/Educación Ambiental y áreas conexas).</li>
+                <li>Títulos obtenidos en el exterior debidamente convalidados.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMISIÓN Y SELECCIÓN -->
+      <section id="admision" data-title="Admisión y selección">
+        <h2>Admisión y selección</h2>
+        <div class="accordion">
+          <div class="ac-item open">
+            <div class="ac-head"><b>1. Inscripción</b><span>▼</span></div>
+            <div class="ac-body">
+              <p>Se rige por el reglamento estudiantil de posgrados. Se entrega propuesta de investigación y soportes.</p>
+            </div>
+          </div>
+          <div class="ac-item">
+            <div class="ac-head"><b>2. Selección y admisión</b><span>▼</span></div>
+            <div class="ac-body">
+              <ul>
+                <li>Evaluación de la propuesta por la coordinación del programa.</li>
+                <li>Criterios: pertinencia, coherencia, viabilidad y trayectoria del aspirante.</li>
+                <li>Convocatoria de entrevista según cronograma.</li>
+              </ul>
+              <p class="small muted">* Ajusta este bloque con el detalle exacto de tu convocatoria.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REQUISITOS DE GRADUACIÓN -->
+      <section id="graduacion" data-title="Requisitos de graduación">
+        <h2>Requisitos de graduación</h2>
+        <ul>
+          <li>Trabajo de grado.</li>
+          <li>Artículo aprobado en revista indexada.</li>
+          <li>Ponencia en evento nacional y/o internacional.</li>
+          <li>Certificado de inglés nivel B1.</li>
+        </ul>
+      </section>
+
+      <!-- COMPETENCIAS -->
+      <section id="competencias" data-title="Competencias">
+        <h2>Competencias</h2>
+        <div class="tabs" role="tablist" aria-label="Competencias">
+          <div class="tab" role="tab" aria-selected="true" aria-controls="tab-saber" id="btn-saber">Del saber</div>
+          <div class="tab" role="tab" aria-selected="false" aria-controls="tab-hacer" id="btn-hacer">Del saber hacer</div>
+          <div class="tab" role="tab" aria-selected="false" aria-controls="tab-ser" id="btn-ser">Del saber ser</div>
+        </div>
+        <div id="tab-saber" class="tabpanel active" role="tabpanel" aria-labelledby="btn-saber">
+          <ul>
+            <li>Reconoce fundamentos epistemológicos de las Ciencias Naturales para su comprensión didáctica.</li>
+            <li>Domina saberes específicos del área según su especialidad.</li>
+            <li>Identifica teorías que sustentan las Didácticas Específicas.</li>
+            <li>Describe procesos históricos, filosóficos y sociológicos del saber didáctico en Ciencias Naturales.</li>
+            <li>Comprende métodos y técnicas de investigación educativa pertinentes al contexto.</li>
+          </ul>
+        </div>
+        <div id="tab-hacer" class="tabpanel" role="tabpanel" aria-labelledby="btn-hacer">
+          <ul>
+            <li>Diseña, implementa y evalúa estrategias didácticas en Biología, Química y Física.</li>
+            <li>Integra TIC y recursos experimentales en ambientes de aprendizaje.</li>
+            <li>Elabora proyectos de investigación/innovación en aula.</li>
+            <li>Construye instrumentos de evaluación acordes con los objetivos de aprendizaje.</li>
+          </ul>
+        </div>
+        <div id="tab-ser" class="tabpanel" role="tabpanel" aria-labelledby="btn-ser">
+          <ul>
+            <li>Actúa con ética, liderazgo y compromiso social en su ejercicio docente e investigativo.</li>
+            <li>Trabaja colaborativamente y respeta la diversidad y la inclusión.</li>
+            <li>Demuestra pensamiento crítico y actitud reflexiva frente a la práctica educativa.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- PLAN DE ESTUDIO -->
+      <section id="plan" data-title="Plan de estudio">
+        <h2>Plan de estudio (4 semestres)</h2>
+        <div class="grid-4">
+          <div class="teacher">
+            <b>I SEMESTRE</b>
+            <ul class="small">
+              <li>Historia y Epistemología de las Ciencias Naturales</li>
+              <li>Investigación Educativa y Ciencia</li>
+              <li>Procesos de Aprendizaje en las Ciencias Naturales</li>
+              <li>Desarrollo Profesional del Profesor de Ciencias Naturales</li>
+              <li>Enfoques Didácticos de las Ciencias Naturales</li>
+            </ul>
+          </div>
+          <div class="teacher">
+            <b>II SEMESTRE</b>
+            <ul class="small">
+              <li>Seminario Proyecto Investigación II</li>
+              <li>Procesos Evaluativos en las Ciencias Naturales</li>
+              <li>Didáctica de la Química</li>
+              <li>Didáctica de la Física</li>
+              <li>Didáctica de la Biología</li>
+            </ul>
+          </div>
+          <div class="teacher">
+            <b>III SEMESTRE</b>
+            <ul class="small">
+              <li>Seminario Proyecto</li>
+              <li>Investigación I</li>
+              <li>Procesos Curriculares en las Ciencias Naturales</li>
+              <li>Electiva de investigación</li>
+              <li>Electiva disciplinar: Contenidos científicos</li>
+            </ul>
+          </div>
+          <div class="teacher">
+            <b>IV SEMESTRE</b>
+            <ul class="small">
+              <li>Proyecto Final</li>
+              <li>Educación Ambiental desde las Ciencias Naturales</li>
+              <li>Electiva Pedagógica</li>
+              <li>Electiva disciplinar: Didácticas específicas</li>
+              <li>Mediaciones tecnológicas en las ciencias naturales</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn primary" href="#" target="_blank" rel="noopener">Descargar Malla Curricular</a>
+          <a class="btn ghost" href="#" target="_blank" rel="noopener">Electivas y cursos</a>
+        </div>
+      </section>
+
+      <!-- DOCENTES -->
+      <section id="docentes" data-title="Docentes">
+        <h2>Docentes</h2>
+        <div class="tabs" role="tablist" aria-label="Áreas de formación de docentes">
+          <div class="tab" role="tab" aria-selected="true" aria-controls="tab-epi" id="btn-epi">Epistemología e Investigación</div>
+          <div class="tab" role="tab" aria-selected="false" aria-controls="tab-ped" id="btn-ped">Pedagogía</div>
+          <div class="tab" role="tab" aria-selected="false" aria-controls="tab-dis" id="btn-dis">Disciplinar</div>
+        </div>
+
+        <div id="tab-epi" class="tabpanel active" role="tabpanel" aria-labelledby="btn-epi">
+          <div class="cols-2">
+            <div class="teacher">
+              <b>Agustín Adúriz Bravo</b>
+              <div class="small">Doctorado en Didáctica de las Ciencias Experimentales • Historia y Epistemología de las Ciencias</div>
+            </div>
+            <div class="teacher">
+              <b>Oscar Eugenio Tamayo Alzate</b>
+              <div class="small">Doctor en Didáctica de las Ciencias • Narrativa en Ciencias • Investigación Educativa y Ciencia</div>
+            </div>
+            <!-- TODO: añade más docentes siguiendo este patrón -->
+          </div>
+        </div>
+
+        <div id="tab-ped" class="tabpanel" role="tabpanel" aria-labelledby="btn-ped">
+          <div class="cols-2">
+            <div class="teacher">
+              <b>Luis Carlos Pacheco Lora</b>
+              <div class="small">Doctor en Psicología • Procesos de aprendizaje de las ciencias naturales</div>
+            </div>
+            <div class="teacher">
+              <b>María Alejandra Taborda Caro</b>
+              <div class="small">Doctora en Currículo • Procesos Curriculares en las Ciencias Naturales</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-dis" class="tabpanel" role="tabpanel" aria-labelledby="btn-dis">
+          <div class="cols-2">
+            <div class="teacher">
+              <b>Andrea Aristizábal Fuquene</b>
+              <div class="small">Doctora en Educación (énfasis ciencias) • Didáctica de la Química</div>
+            </div>
+            <div class="teacher">
+              <b>Carlos Javier Mosquera Suárez</b>
+              <div class="small">Doctor en Didáctica de las Ciencias • Didáctica de la Física</div>
+            </div>
+            <!-- TODO: añade el resto de docentes de tu lista -->
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACTO -->
+      <section id="contacto" data-title="Contacto">
+        <h2>Contacto</h2>
+        <p><b>Correo:</b> <a href="mailto:maestriadidacticacn@correo.unicordoba.edu.co">maestriadidacticacn@correo.unicordoba.edu.co</a></p>
+        <p><b>Dirección:</b> Carrera 6 N° 77-305, Montería • <b>Tel:</b> 7908234</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Organigrama -->
+  <div class="modal" id="orgModal" aria-hidden="true">
+    <div class="box">
+      <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop" alt="Organigrama ampliado">
+    </div>
+  </div>
+
+  <!-- Volver arriba -->
+  <button class="totop" id="toTop" aria-label="Volver arriba">↑</button>
+
+<script>
+  // ====== Toggle SideNav en móviles
+  const btnMenu = document.getElementById('btnMenu');
+  const sidenav = document.getElementById('sidenav');
+  btnMenu?.addEventListener('click', ()=>{
+    const visible = getComputedStyle(sidenav).display !== 'none';
+    sidenav.style.display = visible ? 'none' : 'block';
+  });
+
+  // ====== Tabs (genérico)
+  function wireTabs(scope){
+    const tabs = scope.querySelectorAll('.tab');
+    const panels = scope.querySelectorAll('.tabpanel');
+    tabs.forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        tabs.forEach(t=>t.setAttribute('aria-selected','false'));
+        panels.forEach(p=>p.classList.remove('active'));
+        tab.setAttribute('aria-selected','true');
+        const panel = scope.querySelector('#'+tab.getAttribute('aria-controls'));
+        panel.classList.add('active');
+      });
+    });
+  }
+  document.querySelectorAll('#misionvision, #competencias, #docentes').forEach(wireTabs);
+
+  // ====== Accordion
+  document.querySelectorAll('.ac-head').forEach(h=>{
+    h.addEventListener('click', ()=> h.parentElement.classList.toggle('open'));
+  });
+
+  // ====== Modal organigrama
+  const imgOrg = document.getElementById('imgOrg');
+  const orgModal = document.getElementById('orgModal');
+  imgOrg?.addEventListener('click', ()=> orgModal.classList.add('open'));
+  orgModal?.addEventListener('click', ()=> orgModal.classList.remove('open'));
+
+  // ====== ScrollSpy para SideNav
+  const sections = Array.from(document.querySelectorAll('main section[id]'));
+  const links = Array.from(document.querySelectorAll('#sideLinks a'));
+  const byId = id => links.find(a=>a.getAttribute('href')==='#'+id);
+
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        links.forEach(a=>a.classList.remove('active'));
+        const link = byId(entry.target.id);
+        if(link) link.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-40% 0px -55% 0px", threshold:0});
+
+  sections.forEach(s=>obs.observe(s));
+
+  // ====== Volver arriba
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 900) toTop.classList.add('show'); else toTop.classList.remove('show');
+  });
+  toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>
