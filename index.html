@@ -158,6 +158,12 @@
   }
   .totop.show{display:block}
 
+  /* ==== Vistas: una sección visible por vez ==== */
+  main section { display: none; animation: fade .22s ease; }
+  main section.active { display: block; }
+  @keyframes fade { from { opacity:.0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+
+
   /* Responsive */
   @media (max-width: 1100px){
     .wrap{grid-template-columns: 1fr}
@@ -581,15 +587,74 @@
   <button class="totop" id="toTop" aria-label="Volver arriba">↑</button>
 
 <script>
-  // ====== Toggle SideNav en móviles
+  // ====== SideNav móvil (igual que antes)
   const btnMenu = document.getElementById('btnMenu');
-  const sidenav = document.getElementById('sidenav');
+  const sidenav  = document.getElementById('sidenav');
   btnMenu?.addEventListener('click', ()=>{
     const visible = getComputedStyle(sidenav).display !== 'none';
     sidenav.style.display = visible ? 'none' : 'block';
   });
 
-  // ====== Tabs (genérico)
+  // ====== Router de secciones (una a la vez)
+  const sections = Array.from(document.querySelectorAll('main section[id]'));
+  const sideLinks = Array.from(document.querySelectorAll('#sideLinks a'));
+  const topLinks  = Array.from(document.querySelectorAll('.toplinks a'));
+
+  function setActiveLink(id){
+    const all = [...sideLinks, ...topLinks];
+    all.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+  }
+
+  function showSection(id, pushHash=true){
+    const target = sections.find(s => s.id === id) || sections[0];
+    if(!target) return;
+
+    // Oculta todo y muestra sólo la sección pedida
+    sections.forEach(s => s.classList.remove('active'));
+    target.classList.add('active');
+
+    // Enlaces activos
+    setActiveLink(target.id);
+
+    // Cierra menú en móvil
+    if (window.innerWidth <= 1100) sidenav.style.display = 'none';
+
+    // Lleva el foco al título para accesibilidad
+    const h = target.querySelector('h2, h1');
+    h?.setAttribute('tabindex','-1'); h?.focus();
+
+    // Actualiza hash (opcional)
+    if (pushHash) history.pushState(null, '', '#'+target.id);
+    // Vuelve arriba (evita quedar a mitad de scroll)
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+
+  // Clicks en el menú lateral y en el topbar
+  function hookNav(a){
+    a.addEventListener('click', (e)=>{
+      const href = a.getAttribute('href') || '';
+      if(href.startsWith('#')){
+        e.preventDefault();
+        showSection(href.slice(1));
+      }
+    });
+  }
+  [...sideLinks, ...topLinks].forEach(hookNav);
+
+  // Carga inicial según hash o muestra "inicio"
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const first = sections.find(s=>s.id==='inicio')?.id || sections[0]?.id;
+    const hash = (location.hash || '').replace('#','') || first;
+    showSection(hash, false);
+  });
+
+  // Navegación con atrás/adelante del navegador
+  window.addEventListener('hashchange', ()=>{
+    const hash = (location.hash || '').replace('#','');
+    if(hash) showSection(hash, false);
+  });
+
+  // ====== Tabs (igual que antes, funcionan dentro de cada sección visible)
   function wireTabs(scope){
     const tabs = scope.querySelectorAll('.tab');
     const panels = scope.querySelectorAll('.tabpanel');
@@ -598,47 +663,22 @@
         tabs.forEach(t=>t.setAttribute('aria-selected','false'));
         panels.forEach(p=>p.classList.remove('active'));
         tab.setAttribute('aria-selected','true');
-        const panel = scope.querySelector('#'+tab.getAttribute('aria-controls'));
-        panel.classList.add('active');
+        scope.querySelector('#'+tab.getAttribute('aria-controls'))?.classList.add('active');
       });
     });
   }
   document.querySelectorAll('#misionvision, #competencias, #docentes').forEach(wireTabs);
 
-  // ====== Accordion
+  // ====== Acordeón (igual que antes)
   document.querySelectorAll('.ac-head').forEach(h=>{
     h.addEventListener('click', ()=> h.parentElement.classList.toggle('open'));
   });
 
-  // ====== Modal organigrama
-  const imgOrg = document.getElementById('imgOrg');
+  // ====== Modal organigrama (igual que antes)
+  const imgOrg  = document.getElementById('imgOrg');
   const orgModal = document.getElementById('orgModal');
   imgOrg?.addEventListener('click', ()=> orgModal.classList.add('open'));
   orgModal?.addEventListener('click', ()=> orgModal.classList.remove('open'));
-
-  // ====== ScrollSpy para SideNav
-  const sections = Array.from(document.querySelectorAll('main section[id]'));
-  const links = Array.from(document.querySelectorAll('#sideLinks a'));
-  const byId = id => links.find(a=>a.getAttribute('href')==='#'+id);
-
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        links.forEach(a=>a.classList.remove('active'));
-        const link = byId(entry.target.id);
-        if(link) link.classList.add('active');
-      }
-    });
-  }, {rootMargin: "-40% 0px -55% 0px", threshold:0});
-
-  sections.forEach(s=>obs.observe(s));
-
-  // ====== Volver arriba
-  const toTop = document.getElementById('toTop');
-  window.addEventListener('scroll', ()=>{
-    if(window.scrollY > 900) toTop.classList.add('show'); else toTop.classList.remove('show');
-  });
-  toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 </script>
 </body>
 </html>
